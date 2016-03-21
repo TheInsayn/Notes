@@ -1,0 +1,8 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppOldTheme" parent="android:Theme.DeviceDefault.NoActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+</resources>

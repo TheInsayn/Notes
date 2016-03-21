@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryAccent">#B0BEC5</color>
+    <color name="colorFabMain">#F50057</color>
+    <color name="colorFabMainHighlight">#FF80AB</color>
+    <color name="colorFabTakeNoteEnabled">#4CAF50</color>
+    <color name="colorFabTakeNoteDisabled">#FF1744</color>
+    <color name="colorFabRippleColor">#FFFFFF</color>
+</resources>
