@@ -1,24 +1,31 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_view"
     style="@style/PrimaryAppTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.mathias.android.notes.Notes">
 
-    <include
-        android:id="@+id/app_bar"
-        layout="@layout/app_bar" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/lvNotes"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/app_bar"
-        android:layout_centerHorizontal="true"
-        android:choiceMode="multipleChoice"
-        android:longClickable="false"
-        android:textFilterEnabled="false" />
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/app_bar" />
+
+        <ListView
+            android:id="@+id/lvNotes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:choiceMode="multipleChoice"
+            android:longClickable="true"
+            android:textFilterEnabled="false"
+            android:layout_below="@+id/app_bar" />
+    </RelativeLayout>
+
 
     <android.support.design.widget.FloatingActionButton xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fab"
@@ -26,8 +33,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/activity_margin"
         android:elevation="@dimen/button_elevation"
         android:src="@drawable/ic_add_black_36dp"
         app:backgroundTint="@color/colorFabMain"
@@ -35,4 +42,4 @@
         app:pressedTranslationZ="@dimen/button_press_elevation"
         app:rippleColor="@color/colorFabRippleColor" />
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

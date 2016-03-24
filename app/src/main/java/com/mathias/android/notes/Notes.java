@@ -40,6 +40,8 @@ public class Notes extends Activity {
         mLvNotes = (ListView) findViewById(R.id.lvNotes);
         mLvNotes.setOnItemClickListener((parent, view, position, id) -> {
             //Todo: ELEVATE THAT SHIT
+            Note note = mNoteListAdapter.getItem(position);
+            Snackbar.make(mLvNotes, note.getTitle() +" has been clicked.", Snackbar.LENGTH_SHORT).show();
             view.animate().translationZ(getResources().getDimension(R.dimen.note_elevation));
         });
         mNoteListAdapter = new NoteListAdapter();

@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="10dp">
+    android:paddingBottom="@dimen/margin_note_top">
 
     <TextView
         android:layout_width="wrap_content"
@@ -11,7 +11,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/default_note_title"
         android:id="@+id/txtNewNoteTitle"
-        android:layout_marginStart="@dimen/activity_vertical_margin"
+        android:layout_marginStart="@dimen/activity_margin"
         android:layout_marginTop="@dimen/margin_note_top"
         android:textStyle="bold" />
 
@@ -23,7 +23,7 @@
         android:id="@+id/txtText"
         android:layout_below="@+id/txtNewNoteTitle"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="@dimen/activity_vertical_margin"
+        android:layout_marginStart="@dimen/activity_margin"
         android:layout_marginTop="@dimen/margin_note_title_text" />
 
     <TextView
@@ -33,7 +33,7 @@
         android:text="@string/default_timestamp_text"
         android:id="@+id/txtTimestamp"
         android:layout_gravity="end"
-        android:layout_marginEnd="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/activity_margin"
         android:layout_alignBottom="@+id/txtText"
         android:layout_alignParentEnd="true" />
 
