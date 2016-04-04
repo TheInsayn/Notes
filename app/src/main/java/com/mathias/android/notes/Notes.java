@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -25,7 +27,9 @@ public class Notes extends Activity {
     public static final String CONTENT_TEXT = "CONTENT_TEXT";
     public static final String CONTENT_TIMESTAMP = "CONTENT_TIMESTAMP";
     private static final int GET_NOTE_CONTENT = 999;
-    private ListView mLvNotes;
+    private RecyclerView mRvNotes;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
     private ArrayAdapter<Note> mNoteListAdapter;
     private final List<Note> mListNotes = new ArrayList<>();
 
@@ -37,18 +41,22 @@ public class Notes extends Activity {
         fab.setOnClickListener(v -> startTakeNoteActivity());
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setActionBar(toolbar);
-        mLvNotes = (ListView) findViewById(R.id.lvNotes);
-        mLvNotes.setOnItemClickListener((parent, view, position, id) -> {
+        mRvNotes = (RecyclerView) findViewById(R.id.rvNotes);
+        mRvNotes.setOnItemClickListener((parent, view, position, id) -> {
             //Todo: ELEVATE THAT SHIT
             Note note = mNoteListAdapter.getItem(position);
-            Snackbar.make(mLvNotes, note.getTitle() +" has been clicked.", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mRvNotes, note.getTitle() +" has been clicked.", Snackbar.LENGTH_SHORT).show();
             view.animate().translationZ(getResources().getDimension(R.dimen.note_elevation));
         });
+        mRvNotes.setHasFixedSize(true);
+        mRvNotes.setAdapter(mAdapter);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRvNotes.setLayoutManager(mLayoutManager);
         mNoteListAdapter = new NoteListAdapter();
     }
 
     private void updateNoteList() {
-        mLvNotes.setAdapter(mNoteListAdapter);
+        mRvNotes.setAdapter(mNoteListAdapter);
     }
 
     private void addNote(String title, String text, String timestamp) {
@@ -66,7 +74,7 @@ public class Notes extends Activity {
         switch (requestCode) {
             case GET_NOTE_CONTENT:
                 if (resultCode == RESULT_CANCELED) {
-                    Snackbar.make(mLvNotes, "Note not saved.", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(mRvNotes, "Note not saved.", Snackbar.LENGTH_SHORT).show();
                 } else {
                     Bundle result = data.getBundleExtra(CONTENT_BUNDLE);
                     addNote(result.getString(CONTENT_TITLE), result.getString(CONTENT_TEXT), result.getString(CONTENT_TIMESTAMP));
@@ -86,13 +94,13 @@ public class Notes extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Snackbar.make(mLvNotes, item.getTitle() + " has been clicked!", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mRvNotes, item.getTitle() + " has been clicked!", Snackbar.LENGTH_SHORT).show();
             return true;
         }
         if (id == R.id.action_clear) {
             mListNotes.clear();
             updateNoteList();
-            Snackbar.make(mLvNotes, "List has been cleared.", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mRvNotes, "List has been cleared.", Snackbar.LENGTH_SHORT).show();
             return true;
         }
 
@@ -120,6 +128,24 @@ public class Notes extends Activity {
                 _timestamp.setText(currentNote.getTimestamp());
             }
             return view;
+        }
+    }
+
+    public class RVAdapter extends RecyclerView.Adapter<RVAdapter.NoteViewHolder> {
+        public class NoteViewHoder extends RecyclerView.ViewHolder {
+            CardView cv;
+            TextView noteTitle;
+            TextView noteText;
+            TextView noteTimestamp;
+
+            NoteViewHoler(View itemView) {
+                super(itemView);
+                cv = (CardView)itemView.findViewById(R.id.note_card_view);
+                noteTitle = (TextView)itemView.findViewById(R.id.txtNoteTitle);
+                noteText = (TextView)itemView.findViewById(R.id.txtNoteText);
+                noteTimestamp = (TextView)itemView.findViewById(R.id.txtNoteTimestamp);
+
+            }
         }
     }
 }
