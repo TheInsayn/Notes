@@ -1,40 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/margin_note_top">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/note_padding">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/default_note_title"
-        android:id="@+id/txtNewNoteTitle"
-        android:layout_marginStart="@dimen/activity_margin"
-        android:layout_marginTop="@dimen/margin_note_top"
-        android:textStyle="bold" />
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/note_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/note_height"
+        android:layout_gravity="center"
+        card_view:cardCornerRadius="@dimen/note_corner_radius">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/default_note_text"
-        android:id="@+id/txtText"
-        android:layout_below="@+id/txtNewNoteTitle"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="@dimen/activity_margin"
-        android:layout_marginTop="@dimen/margin_note_title_text" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/note_padding">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-        android:text="@string/default_timestamp_text"
-        android:id="@+id/txtTimestamp"
-        android:layout_gravity="end"
-        android:layout_marginEnd="@dimen/activity_margin"
-        android:layout_alignBottom="@+id/txtText"
-        android:layout_alignParentEnd="true" />
+            <TextView
+                android:id="@+id/txtNoteTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_margin"
+                android:layout_marginTop="@dimen/margin_note_top"
+                android:text="@string/default_note_title"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textStyle="bold" />
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/txtNoteText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/txtNoteTitle"
+                android:layout_marginStart="@dimen/activity_margin"
+                android:layout_marginTop="@dimen/margin_note_title_text"
+                android:text="@string/default_note_text"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/txtNoteTimestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/txtNoteText"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/activity_margin"
+                android:text="@string/default_timestamp_text"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>
