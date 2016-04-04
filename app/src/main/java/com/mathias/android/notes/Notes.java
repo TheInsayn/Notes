@@ -30,8 +30,8 @@ public class Notes extends Activity {
     private RecyclerView mRvNotes;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ArrayAdapter<Note> mNoteListAdapter;
-    private final List<Note> mListNotes = new ArrayList<>();
+    //private ArrayAdapter<Note> mNoteListAdapter;
+    //private final List<Note> mListNotes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,25 +42,26 @@ public class Notes extends Activity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setActionBar(toolbar);
         mRvNotes = (RecyclerView) findViewById(R.id.rvNotes);
-        mRvNotes.setOnItemClickListener((parent, view, position, id) -> {
+        /*mRvNotes.setOnItemClickListener((parent, view, position, id) -> {
             //Todo: ELEVATE THAT SHIT
             Note note = mNoteListAdapter.getItem(position);
             Snackbar.make(mRvNotes, note.getTitle() +" has been clicked.", Snackbar.LENGTH_SHORT).show();
             view.animate().translationZ(getResources().getDimension(R.dimen.note_elevation));
-        });
+        });*/
+        mAdapter = new RVAdapter()
         mRvNotes.setHasFixedSize(true);
         mRvNotes.setAdapter(mAdapter);
         mLayoutManager = new LinearLayoutManager(this);
         mRvNotes.setLayoutManager(mLayoutManager);
-        mNoteListAdapter = new NoteListAdapter();
+        //mNoteListAdapter = new NoteListAdapter();
     }
 
     private void updateNoteList() {
-        mRvNotes.setAdapter(mNoteListAdapter);
+        mRvNotes.setAdapter(mAdapter);
     }
 
     private void addNote(String title, String text, String timestamp) {
-        mListNotes.add(0, (new Note(title, text, timestamp)));
+        mLayoutManager.addView();d(0, (new Note(title, text, timestamp)));
         updateNoteList();
     }
 
@@ -107,7 +108,7 @@ public class Notes extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class NoteListAdapter extends ArrayAdapter<Note> {
+    /*private class NoteListAdapter extends ArrayAdapter<Note> {
         public NoteListAdapter() {
             super(Notes.this, R.layout.view_note, mListNotes);
         }
@@ -129,16 +130,31 @@ public class Notes extends Activity {
             }
             return view;
         }
-    }
+    }*/
 
     public class RVAdapter extends RecyclerView.Adapter<RVAdapter.NoteViewHolder> {
-        public class NoteViewHoder extends RecyclerView.ViewHolder {
+        @Override
+        public RVAdapter.NoteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return null;
+        }
+
+        @Override
+        public void onBindViewHolder(RVAdapter.NoteViewHolder holder, int position) {
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return mRvNotes.getChildCount();
+        }
+
+        public class NoteViewHolder extends RecyclerView.ViewHolder {
             CardView cv;
             TextView noteTitle;
             TextView noteText;
             TextView noteTimestamp;
 
-            NoteViewHoler(View itemView) {
+            NoteViewHolder(View itemView) {
                 super(itemView);
                 cv = (CardView)itemView.findViewById(R.id.note_card_view);
                 noteTitle = (TextView)itemView.findViewById(R.id.txtNoteTitle);
@@ -147,5 +163,6 @@ public class Notes extends Activity {
 
             }
         }
+
     }
 }
