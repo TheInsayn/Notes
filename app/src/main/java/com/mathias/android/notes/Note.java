@@ -25,4 +25,16 @@ public class Note {
     public String getTimestamp() {
         return _timestamp;
     }
+
+    public void setTitle(String title) {
+        _title = title;
+    }
+
+    public void setText(String text) {
+        _text = text;
+    }
+
+    public void setTimestamp(String timestamp) {
+        _timestamp = timestamp;
+    }
 }

@@ -5,15 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.CardView;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.Toolbar;
 
 import java.util.ArrayList;
@@ -28,10 +24,9 @@ public class Notes extends Activity {
     public static final String CONTENT_TIMESTAMP = "CONTENT_TIMESTAMP";
     private static final int GET_NOTE_CONTENT = 999;
     private RecyclerView mRvNotes;
-    private RecyclerView.Adapter mAdapter;
+    private RVAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    //private ArrayAdapter<Note> mNoteListAdapter;
-    //private final List<Note> mListNotes = new ArrayList<>();
+    private final List<Note> mListNotes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,20 +43,20 @@ public class Notes extends Activity {
             Snackbar.make(mRvNotes, note.getTitle() +" has been clicked.", Snackbar.LENGTH_SHORT).show();
             view.animate().translationZ(getResources().getDimension(R.dimen.note_elevation));
         });*/
-        mAdapter = new RVAdapter()
+        mAdapter = new RVAdapter(mListNotes);
         mRvNotes.setHasFixedSize(true);
-        mRvNotes.setAdapter(mAdapter);
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRvNotes.setLayoutManager(mLayoutManager);
-        //mNoteListAdapter = new NoteListAdapter();
+        mRvNotes.setItemAnimator(new DefaultItemAnimator());
+        mRvNotes.setAdapter(mAdapter);
     }
 
     private void updateNoteList() {
-        mRvNotes.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
     }
 
     private void addNote(String title, String text, String timestamp) {
-        mLayoutManager.addView();d(0, (new Note(title, text, timestamp)));
+        mListNotes.add(0, (new Note(title, text, timestamp)));
         updateNoteList();
     }
 
@@ -108,61 +103,44 @@ public class Notes extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /*private class NoteListAdapter extends ArrayAdapter<Note> {
-        public NoteListAdapter() {
-            super(Notes.this, R.layout.view_note, mListNotes);
-        }
+    /*public class RVAdapter extends RecyclerView.Adapter<RVAdapter.NoteViewHolder> {
+        private List<Note> mNoteList;
+        public class NoteViewHolder extends RecyclerView.ViewHolder {
+            TextView mNoteTitle;
+            TextView mNoteText;
+            TextView mNoteTimestamp;
 
-        @Override
-        public View getView(int position, View view, ViewGroup parent) {
-            if (view == null)
-                view = getLayoutInflater().inflate(R.layout.view_note, parent, false);
-
-            Note currentNote = mListNotes.get(position);
-
-            if (currentNote != null) {
-                TextView _title = (TextView) view.findViewById(R.id.txtNewNoteTitle);
-                TextView _text = (TextView) view.findViewById(R.id.txtText);
-                TextView _timestamp = (TextView) view.findViewById(R.id.txtTimestamp);
-                _title.setText(currentNote.getTitle());
-                _text.setText(currentNote.getText());
-                _timestamp.setText(currentNote.getTimestamp());
+            public NoteViewHolder(View view) {
+                super(view);
+                mNoteTitle = (TextView) view.findViewById(R.id.txtNoteTitle);
+                mNoteText = (TextView) view.findViewById(R.id.txtNoteText);
+                mNoteTimestamp = (TextView) view.findViewById(R.id.txtNoteTimestamp);
             }
-            return view;
         }
-    }*/
+        public RVAdapter (List<Note> notes) {
+            mNoteList = notes;
+        }
 
-    public class RVAdapter extends RecyclerView.Adapter<RVAdapter.NoteViewHolder> {
         @Override
         public RVAdapter.NoteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return null;
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_note, parent, false);
+            return new NoteViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(RVAdapter.NoteViewHolder holder, int position) {
-
+            Note note = mNoteList.get(position);
+            holder.mNoteTitle.setText(note.getTitle());
+            holder.mNoteText.setText(note.getText());
+            holder.mNoteTimestamp.setText(note.getTimestamp());
         }
 
         @Override
         public int getItemCount() {
-            return mRvNotes.getChildCount();
+            return mNoteList.size();
         }
 
-        public class NoteViewHolder extends RecyclerView.ViewHolder {
-            CardView cv;
-            TextView noteTitle;
-            TextView noteText;
-            TextView noteTimestamp;
 
-            NoteViewHolder(View itemView) {
-                super(itemView);
-                cv = (CardView)itemView.findViewById(R.id.note_card_view);
-                noteTitle = (TextView)itemView.findViewById(R.id.txtNoteTitle);
-                noteText = (TextView)itemView.findViewById(R.id.txtNoteText);
-                noteTimestamp = (TextView)itemView.findViewById(R.id.txtNoteTimestamp);
 
-            }
-        }
-
-    }
+    }*/
 }

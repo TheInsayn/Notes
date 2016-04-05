@@ -29,7 +29,9 @@ public class TakeNote extends Activity {
         EditText txtText = (EditText) findViewById(R.id.txtNewNoteText);
         txtTitle.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0 && ((EditText) findViewById(R.id.txtNewNoteText)).getText().toString().length() > 0) {
@@ -38,12 +40,16 @@ public class TakeNote extends Activity {
                     changeFabState(false);
                 }
             }
+
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
         txtText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0 && ((EditText) findViewById(R.id.txtNewNoteTitle)).getText().toString().length() > 0) {
@@ -52,14 +58,16 @@ public class TakeNote extends Activity {
                     changeFabState(false);
                 }
             }
+
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
     }
 
     private void changeFabState(boolean enable) {
         ImageButton fab = (ImageButton) findViewById(R.id.fab);
-        if(enable) {
+        if (enable) {
             fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFabTakeNoteEnabled, null)));
             fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_black_36dp, null));
         } else {
@@ -88,7 +96,7 @@ public class TakeNote extends Activity {
 
 
     public void ReturnResult() {
-        if(((EditText) findViewById(R.id.txtNewNoteTitle)).getText().toString().length() > 0
+        if (((EditText) findViewById(R.id.txtNewNoteTitle)).getText().toString().length() > 0
                 && ((EditText) findViewById(R.id.txtNewNoteText)).getText().toString().length() > 0) {
             Intent returnIntent = new Intent();
             Bundle bundle = new Bundle();

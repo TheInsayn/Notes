@@ -17,14 +17,14 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvNotes"
-            android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/app_bar"
             android:layout_centerHorizontal="true"
             android:choiceMode="multipleChoice"
             android:longClickable="true"
-            android:textFilterEnabled="false"
-            android:layout_below="@+id/app_bar" />
+            android:scrollbars="vertical"
+            android:textFilterEnabled="false" />
     </RelativeLayout>
 
 
