@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toolbar;
 
 import java.util.ArrayList;
@@ -49,6 +50,19 @@ public class Notes extends Activity {
         mRvNotes.setLayoutManager(mLayoutManager);
         mRvNotes.setItemAnimator(new DefaultItemAnimator());
         mRvNotes.setAdapter(mAdapter);
+
+        mRvNotes.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRvNotes, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Note note = mListNotes.get(position);
+                //Toast.makeText(getApplicationContext(), movie.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
     }
 
     private void updateNoteList() {
@@ -103,44 +117,9 @@ public class Notes extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /*public class RVAdapter extends RecyclerView.Adapter<RVAdapter.NoteViewHolder> {
-        private List<Note> mNoteList;
-        public class NoteViewHolder extends RecyclerView.ViewHolder {
-            TextView mNoteTitle;
-            TextView mNoteText;
-            TextView mNoteTimestamp;
+    public interface ClickListener {
+        void onClick(View view, int position);
 
-            public NoteViewHolder(View view) {
-                super(view);
-                mNoteTitle = (TextView) view.findViewById(R.id.txtNoteTitle);
-                mNoteText = (TextView) view.findViewById(R.id.txtNoteText);
-                mNoteTimestamp = (TextView) view.findViewById(R.id.txtNoteTimestamp);
-            }
-        }
-        public RVAdapter (List<Note> notes) {
-            mNoteList = notes;
-        }
-
-        @Override
-        public RVAdapter.NoteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_note, parent, false);
-            return new NoteViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(RVAdapter.NoteViewHolder holder, int position) {
-            Note note = mNoteList.get(position);
-            holder.mNoteTitle.setText(note.getTitle());
-            holder.mNoteText.setText(note.getText());
-            holder.mNoteTimestamp.setText(note.getTimestamp());
-        }
-
-        @Override
-        public int getItemCount() {
-            return mNoteList.size();
-        }
-
-
-
-    }*/
+        void onLongClick(View view, int position);
+    }
 }
