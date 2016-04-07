@@ -12,5 +12,6 @@
     <string name="default_note_content_text">Note</string>
     <string name="action_discard">Discard</string>
     <string name="action_clear">Clear List</string>
+    <string name="action_fill_list">Fill List</string>
 
 </resources>

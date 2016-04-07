@@ -29,6 +29,8 @@ public class Notes extends Activity {
     private RecyclerView.LayoutManager mLayoutManager;
     private final List<Note> mListNotes = new ArrayList<>();
 
+    private boolean DEBUGMODE = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Basic init
@@ -60,6 +62,15 @@ public class Notes extends Activity {
 
             }
         }));
+        debugAddTestNotes();
+    }
+
+    private void debugAddTestNotes() {
+        int textNoteCount = 10;
+        for (int i = 0; i < textNoteCount; i++) {
+            mListNotes.add(0, (new Note("Note" + i, "ExampleText" + i, "00:0" + i)));
+        }
+        updateNoteList();
     }
 
     private void updateNoteList() {
@@ -98,16 +109,36 @@ public class Notes extends Activity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (DEBUGMODE) {
+            menu.getItem(2).setVisible(true);
+        } else {
+            menu.getItem(2).setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Snackbar.make(mRvNotes, item.getTitle() + " has been clicked!", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mRvNotes, item.getTitle() + " has been clicked! DEBUGMODE toggled.", Snackbar.LENGTH_SHORT).show();
+            if (DEBUGMODE) {
+                DEBUGMODE = false;
+            } else {
+                DEBUGMODE = true;
+            }
             return true;
         }
         if (id == R.id.action_clear) {
             mListNotes.clear();
             updateNoteList();
             Snackbar.make(mRvNotes, "List has been cleared.", Snackbar.LENGTH_SHORT).show();
+            return true;
+        }
+        if (id == R.id.action_debug_fill_list) {
+            debugAddTestNotes();
+            Snackbar.make(mRvNotes, "List has been filled with test-entries.", Snackbar.LENGTH_SHORT).show();
             return true;
         }
 

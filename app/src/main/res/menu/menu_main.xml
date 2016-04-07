@@ -12,4 +12,11 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_debug_fill_list"
+        android:title="@string/action_fill_list"
+        android:orderInCategory="110"
+        app:showAsAction="never"
+        android:visible="false"
+        />
 </menu>
