@@ -31,31 +31,28 @@ public class Notes extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Basic init
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(v -> startTakeNoteActivity());
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setActionBar(toolbar);
+        //RecyclerView init
         mRvNotes = (RecyclerView) findViewById(R.id.rvNotes);
-        /*mRvNotes.setOnItemClickListener((parent, view, position, id) -> {
-            //Todo: ELEVATE THAT SHIT
-            Note note = mNoteListAdapter.getItem(position);
-            Snackbar.make(mRvNotes, note.getTitle() +" has been clicked.", Snackbar.LENGTH_SHORT).show();
-            view.animate().translationZ(getResources().getDimension(R.dimen.note_elevation));
-        });*/
         mAdapter = new RVAdapter(mListNotes);
-        mRvNotes.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        mRvNotes.setHasFixedSize(true);
         mRvNotes.setLayoutManager(mLayoutManager);
         mRvNotes.setItemAnimator(new DefaultItemAnimator());
         mRvNotes.setAdapter(mAdapter);
-
         mRvNotes.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRvNotes, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Note note = mListNotes.get(position);
-                //Toast.makeText(getApplicationContext(), movie.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
+                //Todo: ELEVATE THAT SHIT
+                Snackbar.make(mRvNotes, note.getTitle() + " has been clicked.", Snackbar.LENGTH_SHORT).show();
+                //view.animate().translationZ(getResources().getDimension(R.dimen.note_elevation));
             }
 
             @Override
