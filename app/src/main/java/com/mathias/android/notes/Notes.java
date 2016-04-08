@@ -123,11 +123,7 @@ public class Notes extends Activity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Snackbar.make(mRvNotes, item.getTitle() + " has been clicked! DEBUGMODE toggled.", Snackbar.LENGTH_SHORT).show();
-            if (DEBUGMODE) {
-                DEBUGMODE = false;
-            } else {
-                DEBUGMODE = true;
-            }
+            DEBUGMODE = !DEBUGMODE;
             return true;
         }
         if (id == R.id.action_clear) {
