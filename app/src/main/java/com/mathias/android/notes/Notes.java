@@ -116,22 +116,22 @@ public class Notes extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Snackbar.make(mRvNotes, item.getTitle() + " has been clicked! DEBUGMODE toggled.", Snackbar.LENGTH_SHORT).show();
-            DEBUGMODE = !DEBUGMODE;
-            return true;
-        }
-        if (id == R.id.action_clear) {
-            mListNotes.clear();
-            updateNoteList();
-            Snackbar.make(mRvNotes, "List has been cleared.", Snackbar.LENGTH_SHORT).show();
-            return true;
-        }
-        if (id == R.id.action_debug_fill_list) {
-            debugAddTestNotes();
-            Snackbar.make(mRvNotes, "List has been filled with test-entries.", Snackbar.LENGTH_SHORT).show();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Snackbar.make(mRvNotes, item.getTitle() + " has been clicked! DEBUGMODE toggled.", Snackbar.LENGTH_SHORT).show();
+                DEBUGMODE = !DEBUGMODE;
+                return true;
+            case R.id.action_clear:
+                mListNotes.clear();
+                updateNoteList();
+                Snackbar.make(mRvNotes, "List has been cleared.", Snackbar.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_debug_fill_list:
+                debugAddTestNotes();
+                Snackbar.make(mRvNotes, "List has been filled with test-entries.", Snackbar.LENGTH_SHORT).show();
+                return true;
+            default:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
