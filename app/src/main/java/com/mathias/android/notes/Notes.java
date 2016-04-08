@@ -33,7 +33,7 @@ public class Notes extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //Basic init
+        //basic init
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
