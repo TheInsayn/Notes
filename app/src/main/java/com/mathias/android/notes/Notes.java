@@ -110,11 +110,7 @@ public class Notes extends Activity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (DEBUGMODE) {
-            menu.getItem(2).setVisible(true);
-        } else {
-            menu.getItem(2).setVisible(false);
-        }
+        menu.findItem(R.id.action_debug_fill_list).setVisible(DEBUGMODE);
         return true;
     }
 
