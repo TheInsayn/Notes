@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,14 +34,17 @@ public class Notes extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //basic init
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(v -> startTakeNoteActivity());
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setActionBar(toolbar);
-        //RecyclerView init
+        initRecyclerView();
+        debugAddTestNotes();
+    }
+
+    private void initRecyclerView() {
         mRvNotes = (RecyclerView) findViewById(R.id.rvNotes);
         mAdapter = new RVAdapter(mListNotes);
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -54,15 +58,27 @@ public class Notes extends Activity {
                 Note note = mListNotes.get(position);
                 //Todo: ELEVATE THAT SHIT
                 Snackbar.make(mRvNotes, note.getTitle() + " has been clicked.", Snackbar.LENGTH_SHORT).show();
-                //view.animate().translationZ(getResources().getDimension(R.dimen.note_elevation));
             }
 
             @Override
             public void onLongClick(View view, int position) {
-
+                mRvNotes.animate().translationZBy(50);
             }
         }));
-        debugAddTestNotes();
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                mListNotes.remove(viewHolder.getAdapterPosition());
+                mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(mRvNotes);
     }
 
     private void debugAddTestNotes() {
@@ -71,6 +87,13 @@ public class Notes extends Activity {
             mListNotes.add(0, (new Note("Note" + i, "ExampleText" + i, "00:0" + i)));
         }
         updateNoteList();
+//        for (int i=0; i<mListNotes.size(); i++) {
+//            View view = mLayoutManager.getChildAt(i);
+//            view.animate().cancel();
+//            view.setTranslationZ(100);
+//            view.setAlpha(0);
+//            view.animate().alpha(1.0f).translationZ(0).setDuration(300).setStartDelay(i * 100);
+//        }
     }
 
     private void updateNoteList() {
