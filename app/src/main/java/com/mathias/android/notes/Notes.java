@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Toolbar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -52,7 +53,7 @@ public class Notes extends Activity {
         mRvNotes.setLayoutManager(mLayoutManager);
         mRvNotes.setItemAnimator(new DefaultItemAnimator());
         mRvNotes.setAdapter(mAdapter);
-        mRvNotes.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRvNotes, new ClickListener() {
+        mRvNotes.addOnItemTouchListener(new ItemTouchListener(getApplicationContext(), mRvNotes, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Note note = mListNotes.get(position);
@@ -62,13 +63,17 @@ public class Notes extends Activity {
 
             @Override
             public void onLongClick(View view, int position) {
-                mRvNotes.animate().translationZBy(50);
+                Snackbar.make(mRvNotes, "Long-Click.", Snackbar.LENGTH_SHORT).show();
+                //view.animate().cancel();
+                //view.animate().alpha(1.0f).translationZ(200).setDuration(300).setStartDelay(0);
             }
         }));
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        ItemTouchHelper.Callback ithCallback = new ItemTouchHelper.Callback() {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
+                Collections.swap(mListNotes, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                mAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                return true;
             }
 
             @Override
@@ -76,9 +81,15 @@ public class Notes extends Activity {
                 mListNotes.remove(viewHolder.getAdapterPosition());
                 mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
             }
+
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN | ItemTouchHelper.UP | ItemTouchHelper.START | ItemTouchHelper.END)
+                        | makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+            }
         };
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(mRvNotes);
+        ItemTouchHelper ith = new ItemTouchHelper(ithCallback);
+        ith.attachToRecyclerView(mRvNotes);
     }
 
     private void debugAddTestNotes() {
