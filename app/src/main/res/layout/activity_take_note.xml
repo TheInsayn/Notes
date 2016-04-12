@@ -4,7 +4,7 @@
     style="@style/PrimaryAppTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mathias.android.notes.Notes">
+    tools:context=".ActivityMain">
 
     <include
         android:id="@+id/app_bar"

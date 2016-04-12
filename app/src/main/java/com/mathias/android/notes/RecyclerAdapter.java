@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by Mathias.
  */
-public class RVAdapter extends RecyclerView.Adapter<RVAdapter.NoteViewHolder> {
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.NoteViewHolder> {
     private List<Note> mNoteList;
 
     public class NoteViewHolder extends RecyclerView.ViewHolder {
@@ -27,18 +27,18 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.NoteViewHolder> {
         }
     }
 
-    public RVAdapter(List<Note> notes) {
+    public RecyclerAdapter(List<Note> notes) {
         mNoteList = notes;
     }
 
     @Override
-    public RVAdapter.NoteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerAdapter.NoteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_note, parent, false);
         return new NoteViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RVAdapter.NoteViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerAdapter.NoteViewHolder holder, int position) {
         Note note = mNoteList.get(position);
         holder.mNoteTitle.setText(note.getTitle());
         holder.mNoteText.setText(note.getText());
