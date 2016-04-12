@@ -111,7 +111,7 @@ public class ActivityMain extends Activity {
         for (int i = 0; i < textNoteCount; i++) {
             mListNotes.add(0, (new Note("Note" + i, "ExampleText" + i, "00:0" + i)));
         }
-        updateNoteList();
+        mAdapter.notifyDataSetChanged();
 //        for (int i=0; i<mListNotes.size(); i++) {
 //            View view = mLayoutManager.getChildAt(i);
 //            view.animate().cancel();
@@ -121,13 +121,9 @@ public class ActivityMain extends Activity {
 //        }
     }
 
-    private void updateNoteList() {
-        mAdapter.notifyDataSetChanged();
-    }
-
     private void addNote(String title, String text, String timestamp) {
         mListNotes.add(0, (new Note(title, text, timestamp)));
-        updateNoteList();
+        mAdapter.notifyItemInserted(0);
     }
 
     private void startTakeNoteActivity() {
@@ -171,12 +167,12 @@ public class ActivityMain extends Activity {
                 return true;
             case R.id.action_clear:
                 mListNotes.clear();
-                updateNoteList();
+                mAdapter.notifyDataSetChanged();
                 Snackbar.make(mRvNotes, "List has been cleared.", Snackbar.LENGTH_SHORT).show();
                 return true;
             case R.id.action_debug_fill_list:
                 debugAddTestNotes();
-                Snackbar.make(mRvNotes, "List has been filled with test-entries.", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(mRvNotes, "List has been filled with test entries.", Snackbar.LENGTH_SHORT).show();
                 return true;
             default:
                 break;
