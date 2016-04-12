@@ -30,6 +30,7 @@ public class ActivityMain extends Activity {
     private RecyclerAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private final List<Note> mListNotes = new ArrayList<>();
+    private Note mTempRemovedNote;
 
     private boolean DEBUGMODE = false;
 
@@ -78,8 +79,21 @@ public class ActivityMain extends Activity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                mListNotes.remove(viewHolder.getAdapterPosition());
-                mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                int pos = viewHolder.getAdapterPosition();
+                mTempRemovedNote = mListNotes.get(pos);
+                mListNotes.remove(pos);
+                mAdapter.notifyItemRemoved(pos);
+                Snackbar snackbar = Snackbar.make(mRvNotes, mTempRemovedNote.getTitle() + " removed.", Snackbar.LENGTH_LONG).setAction("UNDO", view -> {
+                    if (mTempRemovedNote != null) {
+                        mListNotes.add(pos, mTempRemovedNote);
+                        mAdapter.notifyItemInserted(pos);
+                        Snackbar.make(mRvNotes, "Restored!", Snackbar.LENGTH_SHORT);
+                    } else {
+                        Snackbar.make(mRvNotes, "Error restoring...", Snackbar.LENGTH_SHORT);
+                    }
+                    mTempRemovedNote = null;
+                });
+                snackbar.show();
             }
 
             @Override
