@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
-    buildToolsVersion '24.0.0 rc2'
+    buildToolsVersion '24.0.0 rc3'
     defaultConfig {
         applicationId 'com.mathias.android.notes'
         minSdkVersion 23
