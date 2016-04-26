@@ -13,5 +13,6 @@
     <string name="action_discard">Discard</string>
     <string name="action_clear">Clear List</string>
     <string name="action_fill_list">Fill List</string>
+    <string name="title_activity_edit_note">Edit Note</string>
 
 </resources>

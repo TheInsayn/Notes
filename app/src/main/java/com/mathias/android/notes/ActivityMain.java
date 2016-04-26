@@ -21,18 +21,20 @@ import java.util.List;
 
 public class ActivityMain extends Activity {
 
-    private static final String CONTENT_BUNDLE = "CONTENT_BUNDLE";
-    public static final String CONTENT_TITLE = "CONTENT_TITLE";
-    public static final String CONTENT_TEXT = "CONTENT_TEXT";
-    public static final String CONTENT_TIMESTAMP = "CONTENT_TIMESTAMP";
-    private static final int GET_NOTE_CONTENT = 999;
+    protected static final String BUNDLE_TAKE_NOTE = "BUNDLE_TAKE_NOTE";
+    protected static final String BUNDLE_EDIT_NOTE = "BUNDLE_EDIT_NOTE";
+    protected static final String CONTENT_TITLE = "CONTENT_TITLE";
+    protected static final String CONTENT_TEXT = "CONTENT_TEXT";
+    protected static final String CONTENT_TIMESTAMP = "CONTENT_TIMESTAMP";
+    private static final int RESULT_CODE_TAKE_NOTE = 111;
+    private static final int RESULT_CODE_EDIT_NOTE = 222;
     private RecyclerView mRvNotes;
     private RecyclerAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private final List<Note> mListNotes = new ArrayList<>();
     private Note mTempRemovedNote;
 
-    private boolean DEBUGMODE = false;
+    private boolean DEBUG_MODE = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class ActivityMain extends Activity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setActionBar(toolbar);
         initRecyclerView();
-        debugAddTestNotes();
+        //debugAddTestNotes();
     }
 
     private void initRecyclerView() {
@@ -59,12 +61,13 @@ public class ActivityMain extends Activity {
             public void onClick(View view, int position) {
                 Note note = mListNotes.get(position);
                 //Todo: ELEVATE THAT SHIT
-                Snackbar.make(mRvNotes, note.getTitle() + " has been clicked.", Snackbar.LENGTH_SHORT).show();
+                if (DEBUG_MODE) { Snackbar.make(mRvNotes, note.getTitle() + " has been clicked.", Snackbar.LENGTH_SHORT).show(); }
+                startEditNoteActivity(position);
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                Snackbar.make(mRvNotes, "Long-Click.", Snackbar.LENGTH_SHORT).show();
+                if (DEBUG_MODE) { Snackbar.make(mRvNotes, "Long-Click.", Snackbar.LENGTH_SHORT).show(); }
                 //view.animate().cancel();
                 //view.animate().alpha(1.0f).translationZ(200).setDuration(300).setStartDelay(0);
             }
@@ -128,19 +131,33 @@ public class ActivityMain extends Activity {
 
     private void startTakeNoteActivity() {
         Intent intent = new Intent(this, ActivityTakeNote.class);
-        intent.putExtra(CONTENT_BUNDLE, GET_NOTE_CONTENT);
-        startActivityForResult(intent, GET_NOTE_CONTENT);
+        startActivityForResult(intent, RESULT_CODE_TAKE_NOTE);
+    }
+
+    private void startEditNoteActivity(int position) {
+        Intent intent = new Intent(this, ActivityEditNote.class);
+        Note note = mListNotes.get(position);
+        Bundle bundle = new Bundle();
+        bundle.putString(CONTENT_TITLE, note.getTitle());
+        bundle.putString(CONTENT_TEXT, note.getText());
+        bundle.putString(CONTENT_TIMESTAMP, note.getTimestamp());
+        intent.putExtra(BUNDLE_EDIT_NOTE, bundle);
+        startActivityForResult(intent, RESULT_CODE_EDIT_NOTE);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case GET_NOTE_CONTENT:
+            case RESULT_CODE_TAKE_NOTE:
                 if (resultCode == RESULT_CANCELED) {
                     Snackbar.make(mRvNotes, "Note not saved.", Snackbar.LENGTH_SHORT).show();
                 } else {
-                    Bundle result = data.getBundleExtra(CONTENT_BUNDLE);
+                    Bundle result = data.getBundleExtra(BUNDLE_TAKE_NOTE);
                     addNote(result.getString(CONTENT_TITLE), result.getString(CONTENT_TEXT), result.getString(CONTENT_TIMESTAMP));
+                    Snackbar.make(mRvNotes, "Note added.", Snackbar.LENGTH_SHORT).show();
                 }
+                break;
+            case RESULT_CODE_EDIT_NOTE:
+                break;
             default:
                 break;
         }
@@ -154,7 +171,7 @@ public class ActivityMain extends Activity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.action_debug_fill_list).setVisible(DEBUGMODE);
+        menu.findItem(R.id.action_debug_fill_list).setVisible(DEBUG_MODE);
         return true;
     }
 
@@ -162,8 +179,8 @@ public class ActivityMain extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                Snackbar.make(mRvNotes, item.getTitle() + " has been clicked! DEBUGMODE toggled.", Snackbar.LENGTH_SHORT).show();
-                DEBUGMODE = !DEBUGMODE;
+                Snackbar.make(mRvNotes, item.getTitle() + " has been clicked! DEBUG_MODE toggled.", Snackbar.LENGTH_SHORT).show();
+                DEBUG_MODE = !DEBUG_MODE;
                 return true;
             case R.id.action_clear:
                 mListNotes.clear();

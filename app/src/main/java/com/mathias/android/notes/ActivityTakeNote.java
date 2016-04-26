@@ -103,7 +103,7 @@ public class ActivityTakeNote extends Activity {
             bundle.putString(ActivityMain.CONTENT_TITLE, ((EditText) findViewById(R.id.txtNewNoteTitle)).getText().toString());
             bundle.putString(ActivityMain.CONTENT_TEXT, ((EditText) findViewById(R.id.txtNewNoteText)).getText().toString());
             bundle.putString(ActivityMain.CONTENT_TIMESTAMP, ((TextClock) findViewById(R.id.txtNewNoteTimestamp)).getText().toString());
-            returnIntent.putExtra("CONTENT_BUNDLE", bundle);
+            returnIntent.putExtra(ActivityMain.BUNDLE_TAKE_NOTE, bundle);
             setResult(RESULT_OK, returnIntent);
             finish();
         } else {

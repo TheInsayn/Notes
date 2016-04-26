@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/PrimaryAppTheme"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActivityMain">
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar" />
+
+    <EditText
+        android:id="@+id/txtEditNoteTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/app_bar"
+        android:layout_marginEnd="@dimen/activity_margin"
+        android:layout_marginStart="@dimen/activity_margin"
+        android:layout_marginTop="@dimen/activity_margin"
+        android:elegantTextHeight="false"
+        android:hint="@string/take_note_title"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold|normal|italic" />
+
+    <EditText
+        android:id="@+id/txtEditNoteText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/txtEditNoteTitle"
+        android:layout_marginEnd="@dimen/activity_margin"
+        android:layout_marginStart="@dimen/activity_margin"
+        android:layout_marginTop="@dimen/margin_take_note_fields"
+        android:elegantTextHeight="false"
+        android:ems="10"
+        android:hint="@string/default_note_content_text"
+        android:inputType="textMultiLine"
+        android:nestedScrollingEnabled="false" />
+
+    <TextClock
+        android:id="@+id/txtEditNoteTimestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/txtEditNoteText"
+        android:layout_marginEnd="@dimen/activity_margin"
+        android:layout_marginTop="@dimen/activity_margin" />
+
+    <android.support.design.widget.FloatingActionButton xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="@dimen/activity_margin"
+        android:layout_marginEnd="@dimen/activity_margin"
+        android:elevation="@dimen/button_elevation"
+        android:src="@drawable/ic_delete_black_36dp"
+        app:backgroundTint="@color/colorFabTakeNoteDisabled"
+        app:fabSize="normal"
+        app:pressedTranslationZ="@dimen/button_press_elevation"
+        app:rippleColor="@color/colorFabRippleColor" />
+</RelativeLayout>
