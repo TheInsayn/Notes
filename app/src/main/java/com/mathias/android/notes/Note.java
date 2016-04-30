@@ -4,37 +4,37 @@ package com.mathias.android.notes;
  * Created by Mathias.
  */
 public class Note {
-    private String _title;
-    private String _text;
-    private String _timestamp;
+    private String mTitle;
+    private String mText;
+    private String mTimestamp;
 
     public Note(String title, String text, String timestamp) {
-        _title = title;
-        _text = text;
-        _timestamp = timestamp;
+        mTitle = title;
+        mText = text;
+        mTimestamp = timestamp;
     }
 
     public String getTitle() {
-        return _title;
+        return mTitle;
     }
 
     public String getText() {
-        return _text;
+        return mText;
     }
 
     public String getTimestamp() {
-        return _timestamp;
+        return mTimestamp;
     }
 
     public void setTitle(String title) {
-        _title = title;
+        mTitle = title;
     }
 
     public void setText(String text) {
-        _text = text;
+        mText = text;
     }
 
     public void setTimestamp(String timestamp) {
-        _timestamp = timestamp;
+        mTimestamp = timestamp;
     }
 }

@@ -26,6 +26,7 @@ public class ActivityMain extends Activity {
     protected static final String CONTENT_TITLE = "CONTENT_TITLE";
     protected static final String CONTENT_TEXT = "CONTENT_TEXT";
     protected static final String CONTENT_TIMESTAMP = "CONTENT_TIMESTAMP";
+    protected static final String CONTENT_INDEX = "CONTENT_INDEX";
     private static final int RESULT_CODE_TAKE_NOTE = 111;
     private static final int RESULT_CODE_EDIT_NOTE = 222;
     private RecyclerView mRvNotes;
@@ -61,13 +62,17 @@ public class ActivityMain extends Activity {
             public void onClick(View view, int position) {
                 Note note = mListNotes.get(position);
                 //Todo: ELEVATE THAT SHIT
-                if (DEBUG_MODE) { Snackbar.make(mRvNotes, note.getTitle() + " has been clicked.", Snackbar.LENGTH_SHORT).show(); }
+                if (DEBUG_MODE) {
+                    Snackbar.make(mRvNotes, note.getTitle() + " has been clicked.", Snackbar.LENGTH_SHORT).show();
+                }
                 startEditNoteActivity(position);
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                if (DEBUG_MODE) { Snackbar.make(mRvNotes, "Long-Click.", Snackbar.LENGTH_SHORT).show(); }
+                if (DEBUG_MODE) {
+                    Snackbar.make(mRvNotes, "Long-Click.", Snackbar.LENGTH_SHORT).show();
+                }
                 //view.animate().cancel();
                 //view.animate().alpha(1.0f).translationZ(200).setDuration(300).setStartDelay(0);
             }
@@ -141,6 +146,7 @@ public class ActivityMain extends Activity {
         bundle.putString(CONTENT_TITLE, note.getTitle());
         bundle.putString(CONTENT_TEXT, note.getText());
         bundle.putString(CONTENT_TIMESTAMP, note.getTimestamp());
+        bundle.putInt(CONTENT_INDEX, position);
         intent.putExtra(BUNDLE_EDIT_NOTE, bundle);
         startActivityForResult(intent, RESULT_CODE_EDIT_NOTE);
     }
@@ -157,6 +163,17 @@ public class ActivityMain extends Activity {
                 }
                 break;
             case RESULT_CODE_EDIT_NOTE:
+                if (resultCode == RESULT_CANCELED) {
+                    Snackbar.make(mRvNotes, "No change detected.", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Bundle result = data.getBundleExtra(BUNDLE_EDIT_NOTE);
+                    Note note = mListNotes.get(result.getInt(CONTENT_INDEX));
+                    note.setTitle(result.getString(CONTENT_TITLE));
+                    note.setText(result.getString(CONTENT_TEXT));
+                    note.setTimestamp(result.getString(CONTENT_TIMESTAMP));
+                    mAdapter.notifyItemChanged(result.getInt(CONTENT_INDEX));
+                    Snackbar.make(mRvNotes, "Note edited.", Snackbar.LENGTH_SHORT).show();
+                }
                 break;
             default:
                 break;
