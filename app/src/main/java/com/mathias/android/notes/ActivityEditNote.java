@@ -42,13 +42,15 @@ public class ActivityEditNote extends Activity {
 
 
     public void ReturnResult() {
-        if (!((EditText) findViewById(R.id.txtEditNoteTitle)).getText().toString().equals(mPreviousTitle)
-                || !((EditText) findViewById(R.id.txtEditNoteText)).getText().toString().equals(mPreviousText)) {
+        String currTitle = ((EditText) findViewById(R.id.txtEditNoteTitle)).getText().toString();
+        String currText = ((EditText) findViewById(R.id.txtEditNoteText)).getText().toString();
+        String currTimestamp = ((TextClock) findViewById(R.id.txtEditNoteTimestamp)).getText().toString();
+        if (!currTitle.equals(mPreviousTitle) || !currText.equals(mPreviousText)) {
             Intent returnIntent = new Intent();
             Bundle bundle = new Bundle();
-            bundle.putString(ActivityMain.CONTENT_TITLE, ((EditText) findViewById(R.id.txtEditNoteTitle)).getText().toString());
-            bundle.putString(ActivityMain.CONTENT_TEXT, ((EditText) findViewById(R.id.txtEditNoteText)).getText().toString());
-            bundle.putString(ActivityMain.CONTENT_TIMESTAMP, ((TextClock) findViewById(R.id.txtEditNoteTimestamp)).getText().toString());
+            bundle.putString(ActivityMain.CONTENT_TITLE, currTitle);
+            bundle.putString(ActivityMain.CONTENT_TEXT, currText);
+            bundle.putString(ActivityMain.CONTENT_TIMESTAMP, currTimestamp);
             bundle.putInt(ActivityMain.CONTENT_INDEX, mPreviousIndex);
             returnIntent.putExtra(ActivityMain.BUNDLE_EDIT_NOTE, bundle);
             setResult(RESULT_OK, returnIntent);

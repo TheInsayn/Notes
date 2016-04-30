@@ -61,20 +61,16 @@ public class ActivityMain extends Activity {
             @Override
             public void onClick(View view, int position) {
                 Note note = mListNotes.get(position);
+                if (DEBUG_MODE) { Snackbar.make(mRvNotes, note.getTitle() + " has been clicked.", Snackbar.LENGTH_SHORT).show(); }
                 //Todo: ELEVATE THAT SHIT
-                if (DEBUG_MODE) {
-                    Snackbar.make(mRvNotes, note.getTitle() + " has been clicked.", Snackbar.LENGTH_SHORT).show();
-                }
+                //view.animate().cancel();
+                //view.animate().alpha(1.0f).translationZ(200).setDuration(300).setStartDelay(0);
                 startEditNoteActivity(position);
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                if (DEBUG_MODE) {
-                    Snackbar.make(mRvNotes, "Long-Click.", Snackbar.LENGTH_SHORT).show();
-                }
-                //view.animate().cancel();
-                //view.animate().alpha(1.0f).translationZ(200).setDuration(300).setStartDelay(0);
+                if (DEBUG_MODE) { Snackbar.make(mRvNotes, "Long-Click.", Snackbar.LENGTH_SHORT).show(); }
             }
         }));
         ItemTouchHelper.Callback ithCallback = new ItemTouchHelper.Callback() {
