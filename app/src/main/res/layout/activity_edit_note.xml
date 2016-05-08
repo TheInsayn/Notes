@@ -58,8 +58,8 @@
         android:layout_marginBottom="@dimen/activity_margin"
         android:layout_marginEnd="@dimen/activity_margin"
         android:elevation="@dimen/button_elevation"
-        android:src="@drawable/ic_done_black_36dp"
-        app:backgroundTint="@color/colorFabTakeNoteEnabled"
+        android:src="@drawable/ic_undo_variant_black_36dp"
+        app:backgroundTint="@color/colorFabEditNoteNoChanges"
         app:fabSize="normal"
         app:pressedTranslationZ="@dimen/button_press_elevation"
         app:rippleColor="@color/colorFabRippleColor" />

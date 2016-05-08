@@ -66,7 +66,7 @@ public class ActivityTakeNote extends Activity {
     }
 
     private void changeFabState(boolean enable) {
-        ImageButton fab = (ImageButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (enable) {
             fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFabTakeNoteEnabled, null)));
             fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_black_36dp, null));

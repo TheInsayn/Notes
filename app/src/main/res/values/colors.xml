@@ -7,6 +7,8 @@
     <color name="colorFabMainHighlight">#FF80AB</color>
     <color name="colorFabTakeNoteEnabled">#4CAF50</color>
     <color name="colorFabTakeNoteDisabled">#FF1744</color>
+    <color name="colorFabEditNoteNoChanges">#FFEB3B</color>
+    <color name="colorFabEditNoteChanged">#4CAF50</color>
     <color name="colorFabRippleColor">#FFFFFF</color>
     <color name="colorNote">#424242</color>
 </resources>

@@ -168,7 +168,7 @@ public class ActivityMain extends Activity {
                     note.setText(result.getString(CONTENT_TEXT));
                     note.setTimestamp(result.getString(CONTENT_TIMESTAMP));
                     mAdapter.notifyItemChanged(result.getInt(CONTENT_INDEX));
-                    Snackbar.make(mRvNotes, "Note edited.", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(mRvNotes, "Note saved.", Snackbar.LENGTH_SHORT).show();
                 }
                 break;
             default:
