@@ -95,7 +95,7 @@ public class ActivityTakeNote extends Activity {
     }
 
 
-    public void ReturnResult() {
+    private void ReturnResult() {
         if (((EditText) findViewById(R.id.txtNewNoteTitle)).getText().toString().length() > 0
                 && ((EditText) findViewById(R.id.txtNewNoteText)).getText().toString().length() > 0) {
             Intent returnIntent = new Intent();

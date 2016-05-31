@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ActivityMain">
+
     <include
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
@@ -19,35 +20,27 @@
         android:layout_marginEnd="@dimen/activity_margin"
         android:layout_marginStart="@dimen/activity_margin"
         android:layout_marginTop="@dimen/activity_margin"
+        android:background="@android:color/transparent"
         android:elegantTextHeight="false"
         android:hint="@string/take_note_title"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textStyle="bold|normal|italic" />
+        android:textStyle="bold|normal" />
 
     <EditText
         android:id="@+id/txtEditNoteText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/txtEditNoteTitle"
         android:layout_marginEnd="@dimen/activity_margin"
-        android:layout_marginStart="@dimen/activity_margin"
         android:layout_marginTop="@dimen/margin_take_note_fields"
+        android:background="@android:color/transparent"
         android:elegantTextHeight="false"
         android:ems="10"
         android:hint="@string/default_note_content_text"
         android:inputType="textMultiLine"
-        android:nestedScrollingEnabled="false" />
-
-    <TextClock
-        android:id="@+id/txtEditNoteTimestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/txtEditNoteText"
-        android:layout_marginEnd="@dimen/activity_margin"
-        android:layout_marginTop="@dimen/activity_margin" />
+        android:nestedScrollingEnabled="false"
+        android:layout_alignStart="@+id/txtEditNoteTitle" />
 
     <android.support.design.widget.FloatingActionButton xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fab"
@@ -63,4 +56,12 @@
         app:fabSize="normal"
         app:pressedTranslationZ="@dimen/button_press_elevation"
         app:rippleColor="@color/colorFabRippleColor" />
+
+    <TextClock
+        android:id="@+id/txtEditNoteTimestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/activity_margin"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

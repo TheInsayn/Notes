@@ -99,7 +99,7 @@ public class ActivityEditNote extends Activity {
         }
     }
 
-    public void ReturnResult() {
+    private void ReturnResult() {
         String currTitle = ((EditText) findViewById(R.id.txtEditNoteTitle)).getText().toString();
         String currText = ((EditText) findViewById(R.id.txtEditNoteText)).getText().toString();
         String currTimestamp = ((TextClock) findViewById(R.id.txtEditNoteTimestamp)).getText().toString();
