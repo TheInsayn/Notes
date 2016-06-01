@@ -23,6 +23,7 @@
         android:background="@android:color/transparent"
         android:elegantTextHeight="false"
         android:hint="@string/take_note_title"
+        android:maxLines="1"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold|normal" />
 
@@ -31,6 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:layout_alignStart="@+id/txtEditNoteTitle"
         android:layout_below="@+id/txtEditNoteTitle"
         android:layout_marginEnd="@dimen/activity_margin"
         android:layout_marginTop="@dimen/margin_take_note_fields"
@@ -39,8 +41,7 @@
         android:ems="10"
         android:hint="@string/default_note_content_text"
         android:inputType="textMultiLine"
-        android:nestedScrollingEnabled="false"
-        android:layout_alignStart="@+id/txtEditNoteTitle" />
+        android:nestedScrollingEnabled="false" />
 
     <android.support.design.widget.FloatingActionButton xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fab"
@@ -62,6 +63,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/activity_margin"
-        android:layout_centerHorizontal="true" />
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/txtEdited"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/txtEditNoteTimestamp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/last_edited_text"
+        android:textSize="14sp" />
 </RelativeLayout>

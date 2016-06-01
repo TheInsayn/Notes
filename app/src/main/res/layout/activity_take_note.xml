@@ -22,8 +22,9 @@
         android:background="@android:color/transparent"
         android:elegantTextHeight="false"
         android:hint="@string/take_note_title"
+        android:maxLines="1"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textStyle="bold|normal|italic" />
+        android:textStyle="bold|normal" />
 
     <EditText
         android:id="@+id/txtNewNoteText"
@@ -64,4 +65,13 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/activity_margin" />
+
+    <TextView
+        android:text="@string/last_edited_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtEdited"
+        android:textSize="14sp"
+        android:layout_above="@id/txtNewNoteTimestamp"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
