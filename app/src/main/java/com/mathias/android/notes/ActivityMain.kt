@@ -17,9 +17,9 @@ import java.util.*
 
 
 class ActivityMain : Activity() {
-    private var mRvNotes: RecyclerView? = null
-    private var mAdapter: RecyclerAdapter? = null
-    private var mLayoutManager: RecyclerView.LayoutManager? = null
+    private lateinit var mRvNotes: RecyclerView
+    private lateinit var mAdapter: RecyclerAdapter
+    private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private val mListNotes = ArrayList<Note>()
     private var mTempRemovedNote: Note? = null
 
@@ -40,15 +40,15 @@ class ActivityMain : Activity() {
         mRvNotes = findViewById(R.id.rvNotes)
         mAdapter = RecyclerAdapter(mListNotes)
         mLayoutManager = LinearLayoutManager(applicationContext)
-        mRvNotes!!.setHasFixedSize(true)
-        mRvNotes!!.layoutManager = mLayoutManager
-        mRvNotes!!.itemAnimator = DefaultItemAnimator()
-        mRvNotes!!.adapter = mAdapter
-        mRvNotes!!.addOnItemTouchListener(ItemTouchListener(applicationContext, mRvNotes!!, object : ClickListener {
+        mRvNotes.setHasFixedSize(true)
+        mRvNotes.layoutManager = mLayoutManager
+        mRvNotes.itemAnimator = DefaultItemAnimator()
+        mRvNotes.adapter = mAdapter
+        mRvNotes.addOnItemTouchListener(ItemTouchListener(applicationContext, mRvNotes, object : ClickListener {
             override fun onClick(view: View, position: Int) {
                 val note = mListNotes[position]
                 if (debug) {
-                    Snackbar.make(mRvNotes!!, note.title!! + " has been clicked.", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(mRvNotes, note.title!! + " has been clicked.", Snackbar.LENGTH_SHORT).show()
                 }
                 //Todo: ELEVATE THAT SHIT
                 //view.animate().cancel();
@@ -58,14 +58,14 @@ class ActivityMain : Activity() {
 
             override fun onLongClick(view: View, position: Int) {
                 if (debug) {
-                    Snackbar.make(mRvNotes!!, "Long-Click.", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(mRvNotes, "Long-Click.", Snackbar.LENGTH_SHORT).show()
                 }
             }
         }))
         val ithCallback = object : ItemTouchHelper.Callback() {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
                 Collections.swap(mListNotes, viewHolder.adapterPosition, target.adapterPosition)
-                mAdapter!!.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
+                mAdapter.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
                 return true
             }
 
@@ -73,14 +73,14 @@ class ActivityMain : Activity() {
                 val pos = viewHolder.adapterPosition
                 mTempRemovedNote = mListNotes[pos]
                 mListNotes.removeAt(pos)
-                mAdapter!!.notifyItemRemoved(pos)
-                val snackbar = Snackbar.make(mRvNotes!!, mTempRemovedNote!!.title!! + " removed.", Snackbar.LENGTH_LONG).setAction("UNDO") { _ ->
+                mAdapter.notifyItemRemoved(pos)
+                val snackbar = Snackbar.make(mRvNotes, mTempRemovedNote!!.title!! + " removed.", Snackbar.LENGTH_LONG).setAction("UNDO") { _ ->
                     if (mTempRemovedNote != null) {
                         mListNotes.add(pos, mTempRemovedNote!!)
-                        mAdapter!!.notifyItemInserted(pos)
-                        Snackbar.make(mRvNotes!!, "Restored!", Snackbar.LENGTH_SHORT)
+                        mAdapter.notifyItemInserted(pos)
+                        Snackbar.make(mRvNotes, "Restored!", Snackbar.LENGTH_SHORT)
                     } else {
-                        Snackbar.make(mRvNotes!!, "Error restoring...", Snackbar.LENGTH_SHORT)
+                        Snackbar.make(mRvNotes, "Error restoring...", Snackbar.LENGTH_SHORT)
                     }
                     mTempRemovedNote = null
                 }
@@ -100,7 +100,7 @@ class ActivityMain : Activity() {
         for (i in 0 until textNoteCount) {
             mListNotes.add(0, Note("Note$i", "ExampleText$i", "00:0$i"))
         }
-        mAdapter!!.notifyDataSetChanged()
+        mAdapter.notifyDataSetChanged()
         //        for (int i=0; i<mListNotes.size(); i++) {
         //            View view = mLayoutManager.getChildAt(i);
         //            view.animate().cancel();
@@ -112,7 +112,7 @@ class ActivityMain : Activity() {
 
     private fun addNote(title: String?, text: String?, timestamp: String?) {
         mListNotes.add(0, Note(title, text, timestamp))
-        mAdapter!!.notifyItemInserted(0)
+        mAdapter.notifyItemInserted(0)
     }
 
     private fun startTakeNoteActivity() {
@@ -132,27 +132,25 @@ class ActivityMain : Activity() {
         startActivityForResult(intent, RESULT_CODE_EDIT_NOTE)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             RESULT_CODE_TAKE_NOTE -> if (resultCode == Activity.RESULT_CANCELED) {
-                Snackbar.make(mRvNotes!!, "Note not saved.", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(mRvNotes, "Note not saved.", Snackbar.LENGTH_SHORT).show()
             } else {
-                val result = data.getBundleExtra(BUNDLE_TAKE_NOTE)
+                val result = data!!.getBundleExtra(BUNDLE_TAKE_NOTE)
                 addNote(result.getString(CONTENT_TITLE), result.getString(CONTENT_TEXT), result.getString(CONTENT_TIMESTAMP))
-                Snackbar.make(mRvNotes!!, "Note added.", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(mRvNotes, "Note added.", Snackbar.LENGTH_SHORT).show()
             }
             RESULT_CODE_EDIT_NOTE -> if (resultCode == Activity.RESULT_CANCELED) {
-                Snackbar.make(mRvNotes!!, "No change detected.", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(mRvNotes, "No change detected.", Snackbar.LENGTH_SHORT).show()
             } else {
-                val result = data.getBundleExtra(BUNDLE_EDIT_NOTE)
+                val result = data!!.getBundleExtra(BUNDLE_EDIT_NOTE)
                 val note = mListNotes[result.getInt(CONTENT_INDEX)]
                 note.title = result.getString(CONTENT_TITLE)
                 note.text = result.getString(CONTENT_TEXT)
                 note.timestamp = result.getString(CONTENT_TIMESTAMP)
-                mAdapter!!.notifyItemChanged(result.getInt(CONTENT_INDEX))
-                Snackbar.make(mRvNotes!!, "Note saved.", Snackbar.LENGTH_SHORT).show()
-            }
-            else -> {
+                mAdapter.notifyItemChanged(result.getInt(CONTENT_INDEX))
+                Snackbar.make(mRvNotes, "Note saved.", Snackbar.LENGTH_SHORT).show()
             }
         }
     }
@@ -170,19 +168,19 @@ class ActivityMain : Activity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_settings -> {
-                Snackbar.make(mRvNotes!!, item.title.toString() + " has been clicked! debug toggled.", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(mRvNotes, item.title.toString() + " has been clicked! debug toggled.", Snackbar.LENGTH_SHORT).show()
                 debug = !debug
                 return true
             }
             R.id.action_clear -> {
                 mListNotes.clear()
-                mAdapter!!.notifyDataSetChanged()
-                Snackbar.make(mRvNotes!!, "List has been cleared.", Snackbar.LENGTH_SHORT).show()
+                mAdapter.notifyDataSetChanged()
+                Snackbar.make(mRvNotes, "List has been cleared.", Snackbar.LENGTH_SHORT).show()
                 return true
             }
             R.id.action_debug_fill_list -> {
                 debugAddTestNotes()
-                Snackbar.make(mRvNotes!!, "List has been filled with test entries.", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(mRvNotes, "List has been filled with test entries.", Snackbar.LENGTH_SHORT).show()
                 return true
             }
             else -> {

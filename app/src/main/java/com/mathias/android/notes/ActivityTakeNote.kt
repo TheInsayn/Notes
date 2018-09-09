@@ -9,32 +9,31 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.EditText
 import android.widget.TextClock
-import android.widget.Toolbar
 
 
 class ActivityTakeNote : Activity() {
 
+    private lateinit var fab : FloatingActionButton
+    private lateinit var txtTitle : EditText
+    private lateinit var txtText : EditText
+    private lateinit var txtTimestamp : TextClock
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_take_note)
-        val fab = findViewById<FloatingActionButton>(R.id.fab)
+        setActionBar(findViewById(R.id.app_bar))
+        fab = findViewById(R.id.fab)
         fab.setOnClickListener { returnResult() }
-        val toolbar = findViewById<Toolbar>(R.id.app_bar)
-        setActionBar(toolbar)
-        val txtTitle = findViewById<EditText>(R.id.txtNewNoteTitle)
-        val txtText = findViewById<EditText>(R.id.txtNewNoteText)
+        txtTimestamp = findViewById(R.id.txtNewNoteTimestamp)
+        txtTitle = findViewById(R.id.txtNewNoteTitle)
+        txtText = findViewById(R.id.txtNewNoteText)
         txtTitle.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.isNotEmpty() && (findViewById<View>(R.id.txtNewNoteText) as EditText).text.toString().isNotEmpty()) {
-                    changeFabState(true)
-                } else {
-                    changeFabState(false)
-                }
+                changeFabState(s.isNotEmpty() && txtText.text.toString().isNotEmpty())
             }
 
             override fun afterTextChanged(s: Editable) {}
@@ -43,11 +42,7 @@ class ActivityTakeNote : Activity() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.isNotEmpty() && (findViewById<View>(R.id.txtNewNoteTitle) as EditText).text.toString().isNotEmpty()) {
-                    changeFabState(true)
-                } else {
-                    changeFabState(false)
-                }
+                changeFabState(s.isNotEmpty() && txtTitle.text.toString().isNotEmpty())
             }
 
             override fun afterTextChanged(s: Editable) {}
@@ -55,7 +50,6 @@ class ActivityTakeNote : Activity() {
     }
 
     private fun changeFabState(enable: Boolean) {
-        val fab = findViewById<FloatingActionButton>(R.id.fab)
         if (enable) {
             fab.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorFabTakeNoteEnabled, null))
             fab.setImageDrawable(resources.getDrawable(R.drawable.ic_done_black_36dp, null))
@@ -83,13 +77,12 @@ class ActivityTakeNote : Activity() {
 
 
     private fun returnResult() {
-        if ((findViewById<View>(R.id.txtNewNoteTitle) as EditText).text.toString().isNotEmpty()
-                && (findViewById<View>(R.id.txtNewNoteText) as EditText).text.toString().isNotEmpty()) {
+        if (txtTitle.text.toString().isNotEmpty() && txtText.text.toString().isNotEmpty()) {
             val returnIntent = Intent()
             val bundle = Bundle()
-            bundle.putString(ActivityMain.CONTENT_TITLE, (findViewById<View>(R.id.txtNewNoteTitle) as EditText).text.toString())
-            bundle.putString(ActivityMain.CONTENT_TEXT, (findViewById<View>(R.id.txtNewNoteText) as EditText).text.toString())
-            bundle.putString(ActivityMain.CONTENT_TIMESTAMP, (findViewById<View>(R.id.txtNewNoteTimestamp) as TextClock).text.toString())
+            bundle.putString(ActivityMain.CONTENT_TITLE, txtTitle.text.toString())
+            bundle.putString(ActivityMain.CONTENT_TEXT, txtText.text.toString())
+            bundle.putString(ActivityMain.CONTENT_TIMESTAMP, txtTimestamp.text.toString())
             returnIntent.putExtra(ActivityMain.BUNDLE_TAKE_NOTE, bundle)
             setResult(Activity.RESULT_OK, returnIntent)
             finish()

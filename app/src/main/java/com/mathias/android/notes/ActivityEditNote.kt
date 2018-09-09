@@ -7,10 +7,8 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.widget.EditText
 import android.widget.TextClock
-import android.widget.Toolbar
 
 class ActivityEditNote : Activity() {
     private var mPreviousTitle: String? = null
@@ -18,19 +16,24 @@ class ActivityEditNote : Activity() {
     private var mPreviousTimestamp: String? = null
     private var mPreviousIndex: Int = 0
 
+    private lateinit var fab: FloatingActionButton
+    private lateinit var txtTitle: EditText
+    private lateinit var txtText: EditText
+    private lateinit var txtTimestamp: TextClock
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_note)
-        val fab = findViewById<FloatingActionButton>(R.id.fab)
+        setActionBar(findViewById(R.id.app_bar))
+        fab = findViewById(R.id.fab)
         fab.setOnClickListener { returnResult() }
-        val toolbar = findViewById<Toolbar>(R.id.app_bar)
-        setActionBar(toolbar)
 
+        txtTitle = findViewById(R.id.txtEditNoteTitle)
+        txtText = findViewById(R.id.txtEditNoteText)
+        txtTimestamp = findViewById(R.id.txtEditNoteTimestamp)
         initTextFields()
 
         //(if data provided) fill text fields with values
-        val txtTitle = findViewById<EditText>(R.id.txtEditNoteTitle)
-        val txtText = findViewById<EditText>(R.id.txtEditNoteText)
         val data = this.intent.getBundleExtra(ActivityMain.BUNDLE_EDIT_NOTE)
         if (data != null) {
             mPreviousTitle = data.getString(ActivityMain.CONTENT_TITLE)
@@ -43,18 +46,12 @@ class ActivityEditNote : Activity() {
     }
 
     private fun initTextFields() {
-        val txtTitle = findViewById<EditText>(R.id.txtEditNoteTitle)
-        val txtText = findViewById<EditText>(R.id.txtEditNoteText)
         txtTitle.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                val txt = (findViewById<View>(R.id.txtEditNoteText) as EditText).text.toString()
-                if (s.toString() == mPreviousTitle && txt == mPreviousText) {
-                    changeFabState(false)
-                } else {
-                    changeFabState(true)
-                }
+                val txt = txtText.text.toString()
+                changeFabState(!(s.toString() == mPreviousTitle && txt == mPreviousText))
             }
 
             override fun afterTextChanged(s: Editable) {}
@@ -63,12 +60,8 @@ class ActivityEditNote : Activity() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                val txt = (findViewById<View>(R.id.txtEditNoteTitle) as EditText).text.toString()
-                if (s.toString() == mPreviousText && txt == mPreviousTitle) {
-                    changeFabState(false)
-                } else {
-                    changeFabState(true)
-                }
+                val txt = txtTitle.text.toString()
+                changeFabState(!(s.toString() == mPreviousText && txt == mPreviousTitle))
             }
 
             override fun afterTextChanged(s: Editable) {}
@@ -87,9 +80,9 @@ class ActivityEditNote : Activity() {
     }
 
     private fun returnResult() {
-        val currTitle = (findViewById<View>(R.id.txtEditNoteTitle) as EditText).text.toString()
-        val currText = (findViewById<View>(R.id.txtEditNoteText) as EditText).text.toString()
-        val currTimestamp = (findViewById<View>(R.id.txtEditNoteTimestamp) as TextClock).text.toString()
+        val currTitle = txtTitle.text.toString()
+        val currText = txtText.text.toString()
+        val currTimestamp = txtTimestamp.text.toString()
         if (currTitle != mPreviousTitle || currText != mPreviousText) {
             val returnIntent = Intent()
             val bundle = Bundle()
@@ -99,10 +92,8 @@ class ActivityEditNote : Activity() {
             bundle.putInt(ActivityMain.CONTENT_INDEX, mPreviousIndex)
             returnIntent.putExtra(ActivityMain.BUNDLE_EDIT_NOTE, bundle)
             setResult(Activity.RESULT_OK, returnIntent)
-            finish()
         } else {
             setResult(Activity.RESULT_CANCELED)
-            finish()
         }
         finish()
     }
