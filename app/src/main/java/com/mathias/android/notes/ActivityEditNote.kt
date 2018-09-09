@@ -51,7 +51,7 @@ class ActivityEditNote : Activity() {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 val txt = txtText.text.toString()
-                changeFabState(!(s.toString() == mPreviousTitle && txt == mPreviousText))
+                updateFabState(!(s.toString() == mPreviousTitle && txt == mPreviousText))
             }
 
             override fun afterTextChanged(s: Editable) {}
@@ -61,15 +61,14 @@ class ActivityEditNote : Activity() {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 val txt = txtTitle.text.toString()
-                changeFabState(!(s.toString() == mPreviousText && txt == mPreviousTitle))
+                updateFabState(!(s.toString() == mPreviousText && txt == mPreviousTitle))
             }
 
             override fun afterTextChanged(s: Editable) {}
         })
     }
 
-    private fun changeFabState(changed: Boolean) {
-        val fab = findViewById<FloatingActionButton>(R.id.fab)
+    private fun updateFabState(changed: Boolean) {
         if (changed) {
             fab.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorFabEditNoteChanged, null))
             fab.setImageDrawable(resources.getDrawable(R.drawable.ic_content_save_black_36dp, null))

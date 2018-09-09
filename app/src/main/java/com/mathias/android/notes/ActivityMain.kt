@@ -78,9 +78,9 @@ class ActivityMain : Activity() {
                     if (mTempRemovedNote != null) {
                         mListNotes.add(pos, mTempRemovedNote!!)
                         mAdapter.notifyItemInserted(pos)
-                        Snackbar.make(mRvNotes, "Restored!", Snackbar.LENGTH_SHORT)
+                        Snackbar.make(mRvNotes, "Restored!", Snackbar.LENGTH_SHORT).show()
                     } else {
-                        Snackbar.make(mRvNotes, "Error restoring...", Snackbar.LENGTH_SHORT)
+                        Snackbar.make(mRvNotes, "Error restoring...", Snackbar.LENGTH_SHORT).show()
                     }
                     mTempRemovedNote = null
                 }
@@ -88,8 +88,9 @@ class ActivityMain : Activity() {
             }
 
             override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-                return ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP or ItemTouchHelper.START or ItemTouchHelper.END) or ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
+                return ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP) or ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
             }
+
         }
         val ith = ItemTouchHelper(ithCallback)
         ith.attachToRecyclerView(mRvNotes)
