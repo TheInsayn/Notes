@@ -3,6 +3,7 @@ package com.mathias.android.notes;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -41,16 +42,16 @@ public class ActivityMain extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> startTakeNoteActivity());
-        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        Toolbar toolbar = findViewById(R.id.app_bar);
         setActionBar(toolbar);
         initRecyclerView();
         //debugAddTestNotes();
     }
 
     private void initRecyclerView() {
-        mRvNotes = (RecyclerView) findViewById(R.id.rvNotes);
+        mRvNotes = findViewById(R.id.rvNotes);
         mAdapter = new RecyclerAdapter(mListNotes);
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRvNotes.setHasFixedSize(true);
@@ -75,7 +76,7 @@ public class ActivityMain extends Activity {
         }));
         ItemTouchHelper.Callback ithCallback = new ItemTouchHelper.Callback() {
             @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            public boolean onMove(@NonNull RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 Collections.swap(mListNotes, viewHolder.getAdapterPosition(), target.getAdapterPosition());
                 mAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
                 return true;
@@ -101,7 +102,7 @@ public class ActivityMain extends Activity {
             }
 
             @Override
-            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
                 return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN | ItemTouchHelper.UP | ItemTouchHelper.START | ItemTouchHelper.END)
                         | makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
             }

@@ -1,5 +1,6 @@
 package com.mathias.android.notes;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +22,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.NoteVi
 
         public NoteViewHolder(View view) {
             super(view);
-            mNoteTitle = (TextView) view.findViewById(R.id.txtNoteTitle);
-            mNoteText = (TextView) view.findViewById(R.id.txtNoteText);
-            mNoteTimestamp = (TextView) view.findViewById(R.id.txtNoteTimestamp);
+            mNoteTitle = view.findViewById(R.id.txtNoteTitle);
+            mNoteText = view.findViewById(R.id.txtNoteText);
+            mNoteTimestamp = view.findViewById(R.id.txtNoteTimestamp);
         }
     }
 
@@ -32,13 +33,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.NoteVi
     }
 
     @Override
-    public RecyclerAdapter.NoteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerAdapter.NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_note, parent, false);
         return new NoteViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerAdapter.NoteViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerAdapter.NoteViewHolder holder, int position) {
         Note note = mNoteList.get(position);
         holder.mNoteTitle.setText(note.getTitle());
         holder.mNoteText.setText(note.getText());

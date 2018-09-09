@@ -24,16 +24,16 @@ public class ActivityEditNote extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_note);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> ReturnResult());
-        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        Toolbar toolbar = findViewById(R.id.app_bar);
         setActionBar(toolbar);
 
         InitTextFields();
 
         //(if data provided) fill text fields with values
-        EditText txtTitle = (EditText) findViewById(R.id.txtEditNoteTitle);
-        EditText txtText = (EditText) findViewById(R.id.txtEditNoteText);
+        EditText txtTitle = findViewById(R.id.txtEditNoteTitle);
+        EditText txtText = findViewById(R.id.txtEditNoteText);
         Bundle data = this.getIntent().getBundleExtra(ActivityMain.BUNDLE_EDIT_NOTE);
         if (data != null) {
             mPreviousTitle = data.getString(ActivityMain.CONTENT_TITLE);
@@ -46,8 +46,8 @@ public class ActivityEditNote extends Activity {
     }
 
     private void InitTextFields() {
-        EditText txtTitle = (EditText) findViewById(R.id.txtEditNoteTitle);
-        EditText txtText = (EditText) findViewById(R.id.txtEditNoteText);
+        EditText txtTitle = findViewById(R.id.txtEditNoteTitle);
+        EditText txtText = findViewById(R.id.txtEditNoteText);
         txtTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -89,7 +89,7 @@ public class ActivityEditNote extends Activity {
     }
 
     private void changeFabState(boolean changed) {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         if (changed) {
             fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFabEditNoteChanged, null)));
             fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_content_save_black_36dp, null));

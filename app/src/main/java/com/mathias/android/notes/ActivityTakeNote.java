@@ -10,7 +10,6 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextClock;
 import android.widget.Toolbar;
 
@@ -21,12 +20,12 @@ public class ActivityTakeNote extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_note);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> ReturnResult());
-        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        Toolbar toolbar = findViewById(R.id.app_bar);
         setActionBar(toolbar);
-        EditText txtTitle = (EditText) findViewById(R.id.txtNewNoteTitle);
-        EditText txtText = (EditText) findViewById(R.id.txtNewNoteText);
+        EditText txtTitle = findViewById(R.id.txtNewNoteTitle);
+        EditText txtText = findViewById(R.id.txtNewNoteText);
         txtTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -66,7 +65,7 @@ public class ActivityTakeNote extends Activity {
     }
 
     private void changeFabState(boolean enable) {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         if (enable) {
             fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFabTakeNoteEnabled, null)));
             fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_black_36dp, null));
