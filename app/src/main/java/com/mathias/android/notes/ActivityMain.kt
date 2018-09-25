@@ -3,16 +3,16 @@ package com.mathias.android.notes
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.ItemTouchHelper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toolbar
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 
@@ -33,6 +33,10 @@ class ActivityMain : Activity() {
         val toolbar = findViewById<Toolbar>(R.id.app_bar)
         setActionBar(toolbar)
         initRecyclerView()
+        val notes = DBManager.getNotes(this)
+        for (n in notes) {
+            addNote(n)
+        }
         //debugAddTestNotes();
     }
 
@@ -66,7 +70,20 @@ class ActivityMain : Activity() {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
                 Collections.swap(mListNotes, viewHolder.adapterPosition, target.adapterPosition)
                 mAdapter.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
+                swapNotes(viewHolder, target)
                 return true
+            }
+
+            private fun swapNotes(viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder) {
+                val note1 = mListNotes[viewHolder.adapterPosition]
+                val note2 = mListNotes[target.adapterPosition]
+                DBManager.setNotePos(applicationContext, note1.id, note2.pos)
+                DBManager.setNotePos(applicationContext, note2.id, note1.pos)
+                val tmpPos = note1.pos
+                note1.pos = note2.pos
+                note2.pos = tmpPos
+                mAdapter.notifyItemChanged(viewHolder.adapterPosition)
+                mAdapter.notifyItemChanged(target.adapterPosition)
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
@@ -74,7 +91,7 @@ class ActivityMain : Activity() {
                 mTempRemovedNote = mListNotes[pos]
                 mListNotes.removeAt(pos)
                 mAdapter.notifyItemRemoved(pos)
-                val snackbar = Snackbar.make(mRvNotes, mTempRemovedNote!!.title!! + " removed.", Snackbar.LENGTH_LONG).setAction("UNDO") { _ ->
+                val snackbar = Snackbar.make(mRvNotes, mTempRemovedNote!!.title!! + " removed.", Snackbar.LENGTH_LONG).setAction("UNDO") {
                     if (mTempRemovedNote != null) {
                         mListNotes.add(pos, mTempRemovedNote!!)
                         mAdapter.notifyItemInserted(pos)
@@ -97,22 +114,24 @@ class ActivityMain : Activity() {
     }
 
     private fun debugAddTestNotes() {
-        val textNoteCount = 10
-        for (i in 0 until textNoteCount) {
-            mListNotes.add(0, Note("Note$i", "ExampleText$i", "00:0$i"))
+        val noteCount = 10
+        for (i in 0 until noteCount) {
+            val note = Note(0,noteCount-i-1,"Note$i", "ExampleText$i", "00:0$i")
+            note.id = DBManager.saveNote(this, note)
+            mListNotes.add(0, note)
         }
         mAdapter.notifyDataSetChanged()
-        //        for (int i=0; i<mListNotes.size(); i++) {
-        //            View view = mLayoutManager.getChildAt(i);
-        //            view.animate().cancel();
-        //            view.setTranslationZ(100);
-        //            view.setAlpha(0);
-        //            view.animate().alpha(1.0f).translationZ(0).setDuration(300).setStartDelay(i * 100);
-        //        }
     }
 
-    private fun addNote(title: String?, text: String?, timestamp: String?) {
-        mListNotes.add(0, Note(title, text, timestamp))
+    private fun addNote(note :Note, updatePos : Boolean = false) {
+        if (updatePos) {
+            for ((i, n) in mListNotes.withIndex()) {
+                n.pos = i+1
+                DBManager.setNotePos(this, n.id, i+1)
+                mAdapter.notifyItemChanged(i)
+            }
+        }
+        mListNotes.add(0, note)
         mAdapter.notifyItemInserted(0)
     }
 
@@ -139,7 +158,9 @@ class ActivityMain : Activity() {
                 Snackbar.make(mRvNotes, "Note not saved.", Snackbar.LENGTH_SHORT).show()
             } else {
                 val result = data!!.getBundleExtra(BUNDLE_TAKE_NOTE)
-                addNote(result.getString(CONTENT_TITLE), result.getString(CONTENT_TEXT), result.getString(CONTENT_TIMESTAMP))
+                val note = Note(0,0, result.getString(CONTENT_TITLE), result.getString(CONTENT_TEXT), result.getString(CONTENT_TIMESTAMP))
+                note.id = DBManager.saveNote(this, note)
+                addNote(note, true)
                 Snackbar.make(mRvNotes, "Note added.", Snackbar.LENGTH_SHORT).show()
             }
             RESULT_CODE_EDIT_NOTE -> if (resultCode == Activity.RESULT_CANCELED) {
@@ -175,6 +196,7 @@ class ActivityMain : Activity() {
             }
             R.id.action_clear -> {
                 mListNotes.clear()
+                DBManager.deleteAllNotes(this)
                 mAdapter.notifyDataSetChanged()
                 Snackbar.make(mRvNotes, "List has been cleared.", Snackbar.LENGTH_SHORT).show()
                 return true

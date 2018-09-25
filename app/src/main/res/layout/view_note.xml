@@ -54,6 +54,17 @@
                 android:layout_marginEnd="@dimen/activity_margin"
                 android:text="@string/default_timestamp_text"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
+
+            <TextView
+                android:id="@+id/txtNotePos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/txtNoteTitle"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/activity_margin"
+                android:text="0"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

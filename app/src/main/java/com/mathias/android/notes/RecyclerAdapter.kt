@@ -12,6 +12,7 @@ class RecyclerAdapter(private val mNoteList: List<Note>) : RecyclerView.Adapter<
         internal var mNoteTitle: TextView = view.findViewById(R.id.txtNoteTitle)
         internal var mNoteText: TextView = view.findViewById(R.id.txtNoteText)
         internal var mNoteTimestamp: TextView = view.findViewById(R.id.txtNoteTimestamp)
+        internal var mNotePos: TextView = view.findViewById(R.id.txtNotePos)
 
     }
 
@@ -25,6 +26,7 @@ class RecyclerAdapter(private val mNoteList: List<Note>) : RecyclerView.Adapter<
         holder.mNoteTitle.text = note.title
         holder.mNoteText.text = note.text
         holder.mNoteTimestamp.text = note.timestamp
+        holder.mNotePos.text = note.pos.toString()
     }
 
     override fun getItemCount(): Int {
