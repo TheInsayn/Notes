@@ -24,6 +24,8 @@
         android:elegantTextHeight="false"
         android:hint="@string/take_note_title"
         android:maxLines="1"
+        android:singleLine="true"
+        android:nextFocusDown="@id/txtEditNoteText"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold|normal" />
 
