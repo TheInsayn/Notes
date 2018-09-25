@@ -6,9 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
-/**
- * Created by Mathias.
- */
 class RecyclerAdapter(private val mNoteList: List<Note>) : RecyclerView.Adapter<RecyclerAdapter.NoteViewHolder>() {
 
     inner class NoteViewHolder(view: View) : RecyclerView.ViewHolder(view) {
