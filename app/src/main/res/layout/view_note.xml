@@ -8,7 +8,7 @@
     android:paddingRight="@dimen/note_padding"
     android:paddingTop="@dimen/note_padding">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/note_card_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/note_height"
@@ -56,5 +56,5 @@
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
         </RelativeLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

@@ -1,9 +1,9 @@
 package com.mathias.android.notes
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
 import android.view.GestureDetector
 import android.view.MotionEvent
+import androidx.recyclerview.widget.RecyclerView
 
 class ItemTouchListener(context: Context,
                         recyclerView: RecyclerView,

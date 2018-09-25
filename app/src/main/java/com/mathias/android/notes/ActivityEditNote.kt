@@ -4,11 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.TextClock
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ActivityEditNote : Activity() {
     private var mPreviousTitle: String? = null
