@@ -202,6 +202,7 @@ class ActivityMain : Activity() {
                 note.text = result.getString(CONTENT_TEXT)
                 note.timestamp = result.getString(CONTENT_TIMESTAMP)
                 mAdapter.notifyItemChanged(result.getInt(CONTENT_INDEX))
+                DBManager.updateNote(this, note)
                 Snackbar.make(mRvNotes, "Note saved.", Snackbar.LENGTH_SHORT).show()
             }
         }

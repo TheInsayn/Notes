@@ -14,10 +14,10 @@ internal object DBManager {
         val dbHelper = DBHelperNotes(context)
         val db = dbHelper.writableDatabase
         val values = ContentValues()
-        values.put(NoteEntry.COLUMN_NAME_TITLE, note.title)
-        values.put(NoteEntry.COLUMN_NAME_TEXT, note.text)
-        values.put(NoteEntry.COLUMN_NAME_TIME, note.timestamp)
-        values.put(NoteEntry.COLUMN_NAME_POS, note.pos)
+        values.put(NoteEntry.COL_TITLE, note.title)
+        values.put(NoteEntry.COL_TEXT, note.text)
+        values.put(NoteEntry.COL_TIME, note.timestamp)
+        values.put(NoteEntry.COL_POS, note.pos)
         return db.insert(NoteEntry.TABLE_NAME, null, values)
     }
 
@@ -26,13 +26,13 @@ internal object DBManager {
         val db = dbHelper.readableDatabase
         val projection = arrayOf(
                 NoteEntry.ID,
-                NoteEntry.COLUMN_NAME_TITLE,
-                NoteEntry.COLUMN_NAME_TEXT,
-                NoteEntry.COLUMN_NAME_TIME,
-                NoteEntry.COLUMN_NAME_POS)
-        val selection = NoteEntry.COLUMN_NAME_TITLE + " LIKE ?"
+                NoteEntry.COL_TITLE,
+                NoteEntry.COL_TEXT,
+                NoteEntry.COL_TIME,
+                NoteEntry.COL_POS)
+        val selection = NoteEntry.COL_TITLE + " LIKE ?"
         val selectionArgs = arrayOf("%")
-        val sortOrder = NoteEntry.COLUMN_NAME_POS + " DESC"
+        val sortOrder = NoteEntry.COL_POS + " DESC"
         val c = db.query(
                 NoteEntry.TABLE_NAME,
                 projection,
@@ -45,16 +45,27 @@ internal object DBManager {
             if (c.moveToFirst()) {
                 do {
                     val id = c.getLong(c.getColumnIndexOrThrow(NoteEntry.ID))
-                    val pos = c.getInt(c.getColumnIndexOrThrow(NoteEntry.COLUMN_NAME_POS))
-                    val title = c.getString(c.getColumnIndexOrThrow(NoteEntry.COLUMN_NAME_TITLE))
-                    val text = c.getString(c.getColumnIndexOrThrow(NoteEntry.COLUMN_NAME_TEXT))
-                    val time = c.getString(c.getColumnIndexOrThrow(NoteEntry.COLUMN_NAME_TIME))
+                    val pos = c.getInt(c.getColumnIndexOrThrow(NoteEntry.COL_POS))
+                    val title = c.getString(c.getColumnIndexOrThrow(NoteEntry.COL_TITLE))
+                    val text = c.getString(c.getColumnIndexOrThrow(NoteEntry.COL_TEXT))
+                    val time = c.getString(c.getColumnIndexOrThrow(NoteEntry.COL_TIME))
                     notes.add(Note(id, pos, title, text, time))
                 } while (c.moveToNext())
             }
             c.close()
         }
         return notes
+    }
+
+    fun updateNote(context: Context, note: Note) {
+        val dbHelper = DBHelperNotes(context)
+        val db = dbHelper.writableDatabase
+        val query = "UPDATE " + NoteEntry.TABLE_NAME +
+                " SET " + NoteEntry.COL_TITLE + " = \"${note.title}\"" +
+                ", " + NoteEntry.COL_TEXT + " = \"${note.text}\"" +
+                ", " + NoteEntry.COL_TIME + " = \"${note.timestamp}\"" +
+                " WHERE " + NoteEntry.ID + " = " + note.id
+        db.execSQL(query)
     }
 
     fun deleteNote(context: Context, id: Long) {
@@ -75,7 +86,7 @@ internal object DBManager {
         val dbHelper = DBHelperNotes(context)
         val db = dbHelper.writableDatabase
         val query = "UPDATE " + NoteEntry.TABLE_NAME +
-                " SET " + NoteEntry.COLUMN_NAME_POS + " = " + pos +
+                " SET " + NoteEntry.COL_POS + " = " + pos +
                 " WHERE " + NoteEntry.ID + " = " + id
         db.execSQL(query)
     }
@@ -107,10 +118,10 @@ internal object DBManager {
             private const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + NoteEntry.TABLE_NAME
             private const val SQL_CREATE_ENTRIES = "CREATE TABLE " + NoteEntry.TABLE_NAME + " (" +
                     NoteEntry.ID + " INTEGER PRIMARY KEY," +
-                    NoteEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
-                    NoteEntry.COLUMN_NAME_TEXT + TEXT_TYPE + COMMA_SEP +
-                    NoteEntry.COLUMN_NAME_POS + INTEGER_TYPE + COMMA_SEP +
-                    NoteEntry.COLUMN_NAME_TIME + TEXT_TYPE + " )"
+                    NoteEntry.COL_TITLE + TEXT_TYPE + COMMA_SEP +
+                    NoteEntry.COL_TEXT + TEXT_TYPE + COMMA_SEP +
+                    NoteEntry.COL_POS + INTEGER_TYPE + COMMA_SEP +
+                    NoteEntry.COL_TIME + TEXT_TYPE + " )"
         }
     }
 
@@ -118,10 +129,10 @@ internal object DBManager {
         companion object {
             const val ID = BaseColumns._ID
             const val TABLE_NAME = "notes"
-            const val COLUMN_NAME_TITLE = "title"
-            const val COLUMN_NAME_TEXT = "text"
-            const val COLUMN_NAME_TIME = "time"
-            const val COLUMN_NAME_POS = "pos"
+            const val COL_TITLE = "title"
+            const val COL_TEXT = "text"
+            const val COL_TIME = "time"
+            const val COL_POS = "pos"
         }
     }
 }
