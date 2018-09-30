@@ -49,31 +49,12 @@ class ActivityMain : Activity() {
         mRvNotes.layoutManager = mLayoutManager
         mRvNotes.itemAnimator = DefaultItemAnimator()
         mRvNotes.adapter = mAdapter
-        val sbCallback = object : Snackbar.Callback() {
-            override fun onDismissed(sb: Snackbar?, event: Int) {
-                if (mSnackbar != null && mTempRemovedNote != null) {
-                    DBManager.deleteNote(applicationContext, mTempRemovedNote!!.id)
-                    mSnackbar!!.removeCallback(this)
-                    for (i: Int in mTempRemovedNote!!.pos until mListNotes.size) {
-                        mListNotes[i].pos--
-                        DBManager.setNotePos(applicationContext, mListNotes[i].id, mListNotes[i].pos)
-                    }
-                    mAdapter.notifyDataSetChanged()
-                    mSnackbar = null
-                    mTempRemovedNote = null
-                }
-                super.onDismissed(sb, event)
-            }
-        }
         mRvNotes.addOnItemTouchListener(ItemTouchListener(applicationContext, mRvNotes, object : ClickListener {
             override fun onClick(view: View, position: Int) {
                 val note = mListNotes[position]
                 if (debug) {
                     Snackbar.make(mRvNotes, note.title!! + " has been clicked.", Snackbar.LENGTH_SHORT).show()
                 }
-                //Todo: ELEVATE THAT SHIT
-                //view.animate().cancel();
-                //view.animate().alpha(1.0f).translationZ(200).setDuration(300).setStartDelay(0);
                 startEditNoteActivity(position)
             }
 
@@ -83,64 +64,7 @@ class ActivityMain : Activity() {
                 }
             }
         }))
-        val ithCallback = object : ItemTouchHelper.Callback() {
-            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-                Collections.swap(mListNotes, viewHolder.adapterPosition, target.adapterPosition)
-                mAdapter.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
-                swapNotes(viewHolder, target)
-                return true
-            }
-
-            private fun swapNotes(viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder) {
-                val note1 = mListNotes[viewHolder.adapterPosition]
-                val note2 = mListNotes[target.adapterPosition]
-                DBManager.setNotePos(applicationContext, note1.id, note2.pos)
-                DBManager.setNotePos(applicationContext, note2.id, note1.pos)
-                val tmpPos = note1.pos
-                note1.pos = note2.pos
-                note2.pos = tmpPos
-                mAdapter.notifyItemChanged(viewHolder.adapterPosition)
-                mAdapter.notifyItemChanged(target.adapterPosition)
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
-                val pos = viewHolder.adapterPosition
-                if (mSnackbar != null && mTempRemovedNote != null) {
-                    DBManager.deleteNote(applicationContext, mTempRemovedNote!!.id)
-                    mSnackbar!!.removeCallback(sbCallback)
-                    for (i: Int in mTempRemovedNote!!.pos until mListNotes.size) {
-                        mListNotes[i].pos--
-                        DBManager.setNotePos(applicationContext, mListNotes[i].id, mListNotes[i].pos)
-                    }
-                    mSnackbar = null
-                    mTempRemovedNote = null
-                }
-                mTempRemovedNote = mListNotes[pos]
-                mListNotes.removeAt(pos)
-                mAdapter.notifyItemRemoved(pos)
-                mSnackbar = Snackbar.make(mRvNotes, mTempRemovedNote!!.title!! + " removed."
-                        , Snackbar.LENGTH_LONG).setAction("UNDO") {
-                    if (mTempRemovedNote != null) {
-                        mSnackbar!!.removeCallback(sbCallback)
-                        mListNotes.add(pos, mTempRemovedNote!!)
-                        mAdapter.notifyItemInserted(pos)
-                        Snackbar.make(mRvNotes, "Restored!", Snackbar.LENGTH_SHORT).show()
-                    } else {
-                        Snackbar.make(mRvNotes, "Error restoring...", Snackbar.LENGTH_SHORT).show()
-                    }
-                    mSnackbar = null
-                    mTempRemovedNote = null
-                }.addCallback(sbCallback)
-                mSnackbar!!.show()
-            }
-
-            override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-                return ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP) or ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
-            }
-
-        }
-        val ith = ItemTouchHelper(ithCallback)
-        ith.attachToRecyclerView(mRvNotes)
+        itemTouchHelper.attachToRecyclerView(mRvNotes)
     }
 
     private fun debugAddTestNotes() {
@@ -244,10 +168,81 @@ class ActivityMain : Activity() {
         return super.onOptionsItemSelected(item)
     }
 
-    interface ClickListener {
-        fun onClick(view: View, position: Int)
-        fun onLongClick(view: View, position: Int)
+    private val sbCallback = object : Snackbar.Callback() {
+        override fun onDismissed(sb: Snackbar?, event: Int) {
+            if (mSnackbar != null && mTempRemovedNote != null) {
+                DBManager.deleteNote(applicationContext, mTempRemovedNote!!.id)
+                mSnackbar!!.removeCallback(this)
+                for (i: Int in mTempRemovedNote!!.pos until mListNotes.size) {
+                    mListNotes[i].pos--
+                    DBManager.setNotePos(applicationContext, mListNotes[i].id, mListNotes[i].pos)
+                }
+                mAdapter.notifyDataSetChanged()
+                mSnackbar = null
+                mTempRemovedNote = null
+            }
+            super.onDismissed(sb, event)
+        }
     }
+
+    private val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+            Collections.swap(mListNotes, viewHolder.adapterPosition, target.adapterPosition)
+            mAdapter.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
+            swapNotes(viewHolder, target)
+            return true
+        }
+
+        private fun swapNotes(viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder) {
+            val note1 = mListNotes[viewHolder.adapterPosition]
+            val note2 = mListNotes[target.adapterPosition]
+            DBManager.setNotePos(applicationContext, note1.id, note2.pos)
+            DBManager.setNotePos(applicationContext, note2.id, note1.pos)
+            val tmpPos = note1.pos
+            note1.pos = note2.pos
+            note2.pos = tmpPos
+            mAdapter.notifyItemChanged(viewHolder.adapterPosition)
+            mAdapter.notifyItemChanged(target.adapterPosition)
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+            val pos = viewHolder.adapterPosition
+            if (mSnackbar != null && mTempRemovedNote != null) {
+                DBManager.deleteNote(applicationContext, mTempRemovedNote!!.id)
+                mSnackbar!!.removeCallback(sbCallback)
+                for (i: Int in mTempRemovedNote!!.pos until mListNotes.size) {
+                    mListNotes[i].pos--
+                    DBManager.setNotePos(applicationContext, mListNotes[i].id, mListNotes[i].pos)
+                }
+                mSnackbar = null
+                mTempRemovedNote = null
+            }
+            mTempRemovedNote = mListNotes[pos]
+            mListNotes.removeAt(pos)
+            mAdapter.notifyItemRemoved(pos)
+            mSnackbar = Snackbar.make(mRvNotes, mTempRemovedNote!!.title!! + " removed."
+                    , Snackbar.LENGTH_LONG).setAction("UNDO") {
+                if (mTempRemovedNote != null) {
+                    mSnackbar!!.removeCallback(sbCallback)
+                    mListNotes.add(pos, mTempRemovedNote!!)
+                    mAdapter.notifyItemInserted(pos)
+                    Snackbar.make(mRvNotes, "Restored!", Snackbar.LENGTH_SHORT).show()
+                } else {
+                    Snackbar.make(mRvNotes, "Error restoring...", Snackbar.LENGTH_SHORT).show()
+                }
+                mSnackbar = null
+                mTempRemovedNote = null
+            }.addCallback(sbCallback)
+            mSnackbar!!.show()
+        }
+
+        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+            return ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG,
+                    ItemTouchHelper.DOWN or ItemTouchHelper.UP) or ItemTouchHelper.Callback
+                    .makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
+        }
+
+    })
 
     companion object {
         const val BUNDLE_TAKE_NOTE = "BUNDLE_TAKE_NOTE"
@@ -258,5 +253,10 @@ class ActivityMain : Activity() {
         const val CONTENT_INDEX = "CONTENT_INDEX"
         const val RESULT_CODE_TAKE_NOTE = 111
         const val RESULT_CODE_EDIT_NOTE = 222
+    }
+
+    interface ClickListener {
+        fun onClick(view: View, position: Int)
+        fun onLongClick(view: View, position: Int)
     }
 }
